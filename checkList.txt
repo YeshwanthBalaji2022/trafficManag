@@ -1,0 +1,8 @@
+| Step | What to Do Now                               |
+| ---- | ---------------------------------------------|
+|  1  | Set up `frontend/` with React + Leaflet       |
+|  2  | Set up `backend/` with FastAPI + WebSocket    |
+|  3  | Hardcode 5 vehicles and move them on a map    |
+|  4  | Add user-controlled vehicle and UI panel      |
+|  5  | Design backend agent logic (rule-based first) |
+|  6  | Train RL model after logic is stable          |

@@ -1,0 +1,126 @@
+## ✅ Phase 0: Setup & Prep (Now)
+
+### 🎯 Goal: Prepare the dev environment and core project structure.
+
+#### Tasks:
+
+1. **Initialize a monorepo or two separate repos**:
+
+   ```
+   traffic-project/
+   ├── frontend/  ← React app
+   └── backend/   ← FastAPI + SocketIO + RL training
+   ```
+
+2. **Set up tools**:
+
+   * `Node.js`, `npm`, `Python 3.10+`, `Poetry` or `venv`
+   * Install: `npx create-react-app`, `FastAPI`, `uvicorn`, `socket.io`, `Redis`, `Docker`
+
+3. **Create basic `.env` files**:
+
+   * Frontend: WebSocket URL
+   * Backend: Redis URL, DB URL, Port
+
+---
+
+## 🟩 Phase 1: Build a Minimal Simulation (Week 1)
+
+### 🎯 Goal: Show a basic traffic simulation with autonomous agents on a map
+
+#### ✅ Backend (FastAPI):
+
+* Create API `/agents/step` and `/agents/state`
+* Add WebSocket endpoint `/ws` to broadcast vehicle states
+
+#### ✅ Frontend (React + Leaflet):
+
+* Render a map with a few agents as moving markers
+* Connect to backend WebSocket and update positions live
+
+#### ✅ Sim Engine:
+
+* Simulate 5–10 agents on a fixed grid/city map
+* Assign random source/destination and move step-by-step
+
+---
+
+## 🟧 Phase 2: Decentralized Agent Logic (Week 2)
+
+### 🎯 Goal: Let each vehicle act as a decision-making agent.
+
+#### ✅ Backend:
+
+* Write a basic vehicle agent class with:
+
+  * Local state (speed, position, destination)
+  * Communication stub (mock V2V)
+  * Congestion detection and rerouting
+
+* Create a central agent manager to track all vehicles
+
+---
+
+## 🟨 Phase 3: Add Human Control (Week 3)
+
+### 🎯 Goal: Allow a user to manually control one of the vehicles via UI
+
+#### ✅ Frontend:
+
+* Let user select one vehicle to control
+* Add buttons for:
+
+  * Set destination
+  * Increase/decrease speed
+  * Reroute
+
+#### ✅ Backend:
+
+* Mark one vehicle as `"control": "user"`
+* Bypass AI decisions for that vehicle
+* Cache human actions into Redis/PostgreSQL
+
+---
+
+## 🟦 Phase 4: RL Model Training (Week 4)
+
+### 🎯 Goal: Train and run a simple multi-agent RL model
+
+#### ✅ Backend:
+
+* Create a custom `TrafficEnv` with Gym interface
+* Use `Stable-Baselines3` to train PPO or A2C
+* Store model weights, replay logs
+
+#### ✅ Integrate into sim:
+
+* Load trained model for agents
+* Use model output as action for each agent
+* Compare performance with heuristics
+
+---
+
+## 🟪 Phase 5: Replay & Comparison Dashboard (Week 5)
+
+### 🎯 Goal: Analyze and replay previous runs
+
+#### ✅ Frontend:
+
+* Dropdown to select previous run
+* Animate vehicle paths
+* Show stats (time, reroutes, congestion)
+
+#### ✅ Backend:
+
+* Store each run in Redis/PostgreSQL
+* Add replay API: `/runs/{id}`
+
+---
+
+## 🚀 Optional Enhancements
+
+* Add a hybrid control mode (central coordination fallback)
+* Add rewards/score for user (gamified mode)
+* Integrate with **SUMO** or **CARLA** for realism
+
+---

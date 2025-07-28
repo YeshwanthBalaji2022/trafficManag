@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
+// import './App.css'
+import './index.css'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
+      {/* <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -27,7 +28,14 @@ function App() {
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
-      </p>
+      </p> */}
+      
+<div className='h-screen flex items-center justify-center bg-gray-100'>
+  <div className="bg-white p-6 rounded-xl text-center shadow-lg w-64">
+    Hello this is a simple test of React + Tailwind
+  </div>
+</div>
+
     </>
   )
 }

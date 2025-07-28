@@ -1,0 +1,17 @@
+FSD Idea:
+
+build a interactive web app, where users can play along with RLAI to control traffic.
+
+User will be having a vehicle, based on the surrounding traffic he will be suggested with speed control and lane control. which will in turn reduce traffic. 
+
+an automated mode, where user will just place vehicle at random points and run the RL model to check the traffic. (would be cool lookin one to see our RLmodel perform visually) 
+
+maybe a real time traffic application, like getting in realtime traffic feed and comparing it by applying our RL model and check. IDK MAYBE
+
+
+
+Tech Stack:
+
+React, Python, Mapbox, D3js
+
+For storing runs: we can use doc based storage like mongo db etc.

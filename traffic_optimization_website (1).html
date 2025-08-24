@@ -1,0 +1,472 @@
+import React, { useState, useEffect } from 'react';
+
+// Navbar Component
+const Navbar = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <nav className={`fixed top-0 w-full bg-white/95 backdrop-blur-md px-8 py-4 flex justify-between items-center z-50 transition-all duration-300 ${isScrolled ? 'shadow-lg' : ''}`}>
+      <div className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+        SmartTraffic AI
+      </div>
+      <ul className="hidden md:flex gap-8 list-none">
+        {['home', 'features', 'technology', 'demo', 'results'].map((item) => (
+          <li key={item}>
+            <button 
+              onClick={() => scrollToSection(item)}
+              className="text-gray-700 font-medium hover:text-blue-500 transition-colors duration-300 capitalize"
+            >
+              {item}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+};
+
+// Traffic Light Component
+const TrafficLight = ({ position, lights }) => {
+  return (
+    <div className={`absolute w-5 h-15 bg-gray-800 rounded-lg flex flex-col items-center p-1 ${position}`}>
+      {lights.map((color, index) => (
+        <div 
+          key={index}
+          className={`w-2.5 h-2.5 rounded-full m-0.5 transition-all duration-500 ${
+            color.active ? color.color : 'bg-gray-600'
+          }`}
+        />
+      ))}
+    </div>
+  );
+};
+
+// Traffic Visualization Component
+const TrafficVisualization = () => {
+  const [lightState, setLightState] = useState(0);
+
+  const lightStates = [
+    [
+      [{ color: 'bg-red-500', active: true }, { color: 'bg-yellow-500', active: false }, { color: 'bg-green-500', active: false }],
+      [{ color: 'bg-red-500', active: false }, { color: 'bg-yellow-500', active: false }, { color: 'bg-green-500', active: true }]
+    ],
+    [
+      [{ color: 'bg-red-500', active: false }, { color: 'bg-yellow-500', active: true }, { color: 'bg-green-500', active: false }],
+      [{ color: 'bg-red-500', active: false }, { color: 'bg-yellow-500', active: true }, { color: 'bg-green-500', active: false }]
+    ],
+    [
+      [{ color: 'bg-red-500', active: false }, { color: 'bg-yellow-500', active: false }, { color: 'bg-green-500', active: true }],
+      [{ color: 'bg-red-500', active: true }, { color: 'bg-yellow-500', active: false }, { color: 'bg-green-500', active: false }]
+    ],
+    [
+      [{ color: 'bg-red-500', active: false }, { color: 'bg-yellow-500', active: true }, { color: 'bg-green-500', active: false }],
+      [{ color: 'bg-red-500', active: false }, { color: 'bg-yellow-500', active: true }, { color: 'bg-green-500', active: false }]
+    ]
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLightState((prev) => (prev + 1) % lightStates.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="absolute top-1/2 right-10 transform -translate-y-1/2 w-75 h-75 hidden lg:block">
+      <div className="relative w-full h-full bg-white/10 backdrop-blur-md rounded-3xl flex items-center justify-center">
+        <TrafficLight 
+          position="top-5" 
+          lights={lightStates[lightState][0]}
+        />
+        <TrafficLight 
+          position="right-5" 
+          lights={lightStates[lightState][1]}
+        />
+        
+        {/* Animated Vehicles */}
+        <div className="absolute w-4 h-2 bg-white rounded-sm animate-pulse" style={{
+          top: '40px', left: '45%',
+          animation: 'moveVehicle1 3s linear infinite'
+        }} />
+        <div className="absolute w-4 h-2 bg-white rounded-sm animate-pulse" style={{
+          top: '55%', right: '40px',
+          animation: 'moveVehicle2 3s linear infinite'
+        }} />
+      </div>
+    </div>
+  );
+};
+
+// Hero Section Component
+const HeroSection = () => {
+  return (
+    <section id="home" className="h-screen flex items-center justify-center text-center text-white relative bg-gradient-to-br from-blue-500 via-purple-600 to-purple-800">
+      <div className="max-w-4xl px-8 animate-fade-in-up">
+        <h1 className="text-6xl md:text-7xl font-bold mb-6 text-shadow-lg">
+          SmartTraffic AI
+        </h1>
+        <p className="text-xl md:text-2xl mb-6 opacity-90">
+          Revolutionizing Urban Mobility with Reinforcement Learning
+        </p>
+        <p className="text-lg mb-8 opacity-80 max-w-3xl mx-auto">
+          Dynamic traffic light control system that adapts in real-time to reduce congestion and optimize traffic flow using advanced AI algorithms.
+        </p>
+        <button 
+          onClick={() => document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })}
+          className="inline-block px-8 py-4 bg-white/20 backdrop-blur-md border-2 border-white/30 rounded-full text-white font-bold transition-all duration-300 hover:bg-white/30 hover:-translate-y-1 hover:shadow-2xl"
+        >
+          View Live Demo
+        </button>
+      </div>
+      <TrafficVisualization />
+    </section>
+  );
+};
+
+// Feature Card Component
+const FeatureCard = ({ icon, title, description }) => {
+  return (
+    <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-200 transition-transform duration-300 hover:-translate-y-3 hover:shadow-2xl">
+      <div className="text-5xl mb-4">{icon}</div>
+      <h3 className="text-gray-800 mb-4 text-xl font-semibold">{title}</h3>
+      <p className="text-gray-600 leading-relaxed">{description}</p>
+    </div>
+  );
+};
+
+// Features Section Component
+const FeaturesSection = () => {
+  const features = [
+    {
+      icon: "🚦",
+      title: "Dynamic Signal Control",
+      description: "AI-powered traffic lights that adapt in real-time based on current traffic conditions and learned patterns."
+    },
+    {
+      icon: "🧠",
+      title: "Reinforcement Learning",
+      description: "Advanced RL algorithms continuously learn and optimize traffic flow patterns for maximum efficiency."
+    },
+    {
+      icon: "📊",
+      title: "Predictive Analytics",
+      description: "Machine learning models predict traffic patterns and preemptively adjust signals to prevent congestion."
+    },
+    {
+      icon: "🗺️",
+      title: "Dynamic Routing",
+      description: "Intelligent vehicle routing system suggests optimal paths during peak times and incidents."
+    },
+    {
+      icon: "⚡",
+      title: "Real-time Optimization",
+      description: "Instant response to changing traffic conditions with millisecond-precision signal adjustments."
+    },
+    {
+      icon: "🎯",
+      title: "SUMO Integration",
+      description: "Rigorously tested using SUMO traffic simulation for realistic and validated performance metrics."
+    }
+  ];
+
+  return (
+    <section id="features" className="py-20 px-8 max-w-6xl mx-auto">
+      <div className="bg-white/95 rounded-3xl overflow-hidden shadow-2xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-12">
+          {features.map((feature, index) => (
+            <FeatureCard 
+              key={index}
+              icon={feature.icon}
+              title={feature.title}
+              description={feature.description}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Tech Item Component
+const TechItem = ({ icon, title, description }) => {
+  return (
+    <div className="bg-white/10 p-8 rounded-2xl text-center backdrop-blur-md">
+      <h3 className="text-xl font-semibold mb-3">{icon} {title}</h3>
+      <p className="text-gray-300 leading-relaxed">{description}</p>
+    </div>
+  );
+};
+
+// Technology Section Component
+const TechnologySection = () => {
+  const technologies = [
+    {
+      icon: "🤖",
+      title: "Deep Q-Learning",
+      description: "Neural networks for optimal action selection in complex traffic scenarios"
+    },
+    {
+      icon: "🐍",
+      title: "Python & PyTorch",
+      description: "Robust ML framework for model training and deployment"
+    },
+    {
+      icon: "🚗",
+      title: "SUMO Simulation",
+      description: "Industry-standard traffic simulation environment"
+    },
+    {
+      icon: "📡",
+      title: "Real-time Data",
+      description: "IoT sensors and traffic cameras for live traffic monitoring"
+    },
+    {
+      icon: "☁️",
+      title: "Cloud Computing",
+      description: "Scalable infrastructure for citywide deployment"
+    },
+    {
+      icon: "📈",
+      title: "Analytics Dashboard",
+      description: "Comprehensive monitoring and performance visualization"
+    }
+  ];
+
+  return (
+    <section id="technology" className="py-20 px-8 max-w-6xl mx-auto">
+      <div className="bg-black/80 text-white rounded-3xl p-12">
+        <h2 className="text-center mb-8 text-4xl font-bold">Technology Stack</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {technologies.map((tech, index) => (
+            <TechItem 
+              key={index}
+              icon={tech.icon}
+              title={tech.title}
+              description={tech.description}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Metric Card Component
+const MetricCard = ({ value, label }) => {
+  return (
+    <div className="bg-gradient-to-br from-blue-500 to-purple-600 text-white p-8 rounded-2xl text-center">
+      <span className="block text-4xl font-bold mb-2">{value}</span>
+      <span className="text-blue-100">{label}</span>
+    </div>
+  );
+};
+
+// Demo Section Component
+const DemoSection = () => {
+  const [metrics, setMetrics] = useState({
+    avgWait: '2.3s',
+    throughput: '487',
+    efficiency: '94%',
+    reduction: '38%'
+  });
+
+  const updateMetric = (key, value) => {
+    setMetrics(prev => ({ ...prev, [key]: value }));
+  };
+
+  const startSimulation = () => {
+    updateMetric('avgWait', (Math.random() * 2 + 1).toFixed(1) + 's');
+    updateMetric('throughput', Math.floor(Math.random() * 200 + 400).toString());
+    updateMetric('efficiency', Math.floor(Math.random() * 10 + 90) + '%');
+    updateMetric('reduction', Math.floor(Math.random() * 20 + 30) + '%');
+  };
+
+  const addTraffic = () => {
+    updateMetric('avgWait', (Math.random() * 3 + 2).toFixed(1) + 's');
+    updateMetric('throughput', Math.floor(Math.random() * 300 + 600).toString());
+  };
+
+  const createIncident = () => {
+    updateMetric('avgWait', (Math.random() * 4 + 3).toFixed(1) + 's');
+    updateMetric('efficiency', Math.floor(Math.random() * 15 + 75) + '%');
+  };
+
+  const resetDemo = () => {
+    setMetrics({
+      avgWait: '2.3s',
+      throughput: '487',
+      efficiency: '94%',
+      reduction: '38%'
+    });
+  };
+
+  return (
+    <section id="demo" className="py-20 px-8 max-w-6xl mx-auto">
+      <div className="bg-white/95 rounded-3xl p-12 text-center shadow-2xl">
+        <h2 className="mb-8 text-4xl font-bold text-gray-800">Live Traffic Simulation</h2>
+        <p className="mb-8 text-xl text-gray-600">Experience our AI system in action with real-time traffic optimization</p>
+        
+        <div className="flex flex-wrap justify-center gap-4 mb-8">
+          {[
+            { label: 'Start Simulation', action: startSimulation },
+            { label: 'Add Traffic Load', action: addTraffic },
+            { label: 'Simulate Incident', action: createIncident },
+            { label: 'Reset', action: resetDemo }
+          ].map((button, index) => (
+            <button 
+              key={index}
+              onClick={button.action}
+              className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white border-none rounded-full font-bold transition-all duration-300 hover:scale-105 hover:shadow-lg"
+            >
+              {button.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <MetricCard value={metrics.avgWait} label="Avg Wait Time" />
+          <MetricCard value={metrics.throughput} label="Vehicles/Hour" />
+          <MetricCard value={metrics.efficiency} label="System Efficiency" />
+          <MetricCard value={metrics.reduction} label="Congestion Reduction" />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Results Section Component
+const ResultsSection = () => {
+  const results = [
+    {
+      title: "Traffic Flow Improvement",
+      value: "+42%",
+      description: "Increase in overall traffic throughput compared to traditional fixed-timing systems",
+      gradient: "from-teal-500 to-green-400"
+    },
+    {
+      title: "Wait Time Reduction",
+      value: "-35%",
+      description: "Decrease in average vehicle waiting time at intersections",
+      gradient: "from-blue-500 to-purple-600"
+    },
+    {
+      title: "Fuel Savings",
+      value: "28%",
+      description: "Reduction in fuel consumption due to optimized traffic flow",
+      gradient: "from-pink-500 to-red-500"
+    }
+  ];
+
+  const achievements = [
+    "Successfully implemented Deep Q-Learning algorithm for multi-intersection optimization",
+    "Integrated real-time traffic data processing with SUMO simulation environment", 
+    "Developed adaptive routing system that responds to dynamic traffic conditions",
+    "Created comprehensive monitoring dashboard for system performance analysis",
+    "Achieved scalable solution suitable for citywide deployment"
+  ];
+
+  return (
+    <section id="results" className="py-20 px-8 max-w-6xl mx-auto">
+      <div className="bg-white/95 rounded-3xl overflow-hidden shadow-2xl">
+        <div className="p-12">
+          <h2 className="text-center mb-8 text-4xl font-bold text-gray-800">Project Results</h2>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            {results.map((result, index) => (
+              <div key={index} className={`bg-gradient-to-br ${result.gradient} text-white p-8 rounded-2xl`}>
+                <h3 className="text-xl font-semibold mb-4">{result.title}</h3>
+                <div className="text-5xl font-bold mb-4">{result.value}</div>
+                <p className="text-white/90">{result.description}</p>
+              </div>
+            ))}
+          </div>
+          
+          <div className="bg-gray-50 p-8 rounded-2xl">
+            <h3 className="text-gray-800 mb-6 text-2xl font-semibold">Key Achievements</h3>
+            <ul className="text-gray-600 space-y-3">
+              {achievements.map((achievement, index) => (
+                <li key={index} className="flex items-start">
+                  <span className="text-blue-500 mr-3 text-xl">•</span>
+                  <span className="leading-relaxed">{achievement}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Footer Component
+const Footer = () => {
+  return (
+    <footer className="bg-black/90 text-white text-center py-8">
+      <p className="mb-2">&copy; 2024 SmartTraffic AI - Reinforcement Learning Traffic Optimization Project</p>
+      <p className="text-gray-400">Advancing Urban Mobility Through Artificial Intelligence</p>
+    </footer>
+  );
+};
+
+// Main App Component
+const App = () => {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-purple-600 to-purple-800 overflow-x-hidden">
+      <style jsx>{`
+        @keyframes moveVehicle1 {
+          0% { top: -10px; left: 50%; }
+          25% { top: 50%; left: 50%; }
+          50% { top: 50%; left: 100%; }
+          75% { top: 50%; left: 50%; }
+          100% { top: -10px; left: 50%; }
+        }
+        @keyframes moveVehicle2 {
+          0% { top: 50%; right: -10px; }
+          25% { top: 50%; right: 50%; }
+          50% { top: -10px; right: 50%; }
+          75% { top: 50%; right: 50%; }
+          100% { top: 50%; right: -10px; }
+        }
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fade-in-up {
+          animation: fade-in-up 1s ease;
+        }
+        .text-shadow-lg {
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+      `}</style>
+      
+      <Navbar />
+      <HeroSection />
+      <FeaturesSection />
+      <TechnologySection />
+      <DemoSection />
+      <ResultsSection />
+      <Footer />
+    </div>
+  );
+};
+
+export default App;

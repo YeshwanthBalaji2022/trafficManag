@@ -223,15 +223,19 @@ nav .nav-cta:hover {
         }
 
         .features {
-            background: rgba(255, 255, 255, 0.95);
+            background: black;
             border-radius: 20px;
-            margin: 2rem 0;
+    box-shadow: 0 0 25px rgba(0, 255, 200, 0.3), 0 0 50px rgba(0, 255, 200, 0.1);
+    backdrop-filter: blur(10px);
+    animation: fadeInUp 1.5s ease forwards, floaty 6s ease-in-out infinite;
+    transform-style: preserve-3d;            margin: 2rem 0;
             padding: auto;
             overflow: hidden;
         }
 
         .features h2{
             margin: 2rem 0;
+            color: white;
 
         }
 

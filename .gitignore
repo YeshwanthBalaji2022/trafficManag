@@ -59,3 +59,52 @@ __pycache__/
 .temp/
 tmp/
 temp/
+
+# ML Models and weights
+*.pt
+*.pth
+*.onnx
+*.h5
+*.pkl
+
+# Generated Images and Videos
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.mp4
+*.avi
+*.mov
+*.webm
+
+# Video/Image processing outputs
+backend/sample_images/
+backend/datasets/
+backend/split_output_grouped/
+backend/stitched_videos/
+backend/joined_videos/
+backend/output_*.jpg
+backend/defisheye_output.jpg
+backend/undistorted_segment.jpg
+
+# Test and temporary files
+backend/test.*
+backend/testt.*
+backend/image.jpg
+backend/fisheye.jpg
+backend/output.jpg
+
+# Backup and config folders
+backend/bkpconfigFiles/
+
+# HTML test files in backend
+backend/*.html
+backend/extrCoord.html
+
+# JSON data files (non-config)
+backend/nt.json
+
+# Summary and documentation files (optional)
+*_SUMMARY.md
+*_WORKFLOW_SUMMARY.md
+updated_gantt_chart.html

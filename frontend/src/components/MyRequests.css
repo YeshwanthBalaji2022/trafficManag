@@ -1,0 +1,180 @@
+.my-requests {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  padding-top: 140px; /* Account for fixed navbar */
+  min-height: 100vh;
+  background: #0a0a0a;
+}
+
+.my-requests h2 {
+  color: #00ffe0;
+  font-family: 'Orbitron', 'Poppins', sans-serif;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  text-align: center;
+  text-shadow: 0 0 12px #00ffe0cc;
+  letter-spacing: 2px;
+}
+
+.my-requests-loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: #00ffe0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.no-requests {
+  text-align: center;
+  padding: 3rem;
+  background: rgba(20, 30, 40, 0.85);
+  border-radius: 16px;
+  box-shadow: 0 0 24px #00ffe055;
+  color: #00ffe0;
+  border: 1px solid rgba(0, 255, 224, 0.3);
+}
+
+.no-requests p {
+  margin: 0.8rem 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+}
+
+.requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.request-card {
+  background: rgba(20, 30, 40, 0.85);
+  border: 1px solid rgba(0, 255, 224, 0.3);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 0 16px #00ffe055;
+  transition: all 0.3s ease;
+}
+
+.request-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 32px #00ffe0aa;
+  border-color: rgba(0, 255, 224, 0.6);
+}
+
+.request-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 255, 224, 0.3);
+}
+
+.request-id {
+  font-size: 0.9rem;
+  color: #00ffe0aa;
+  font-family: 'Orbitron', monospace;
+  opacity: 0.8;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.request-details {
+  margin-bottom: 1.5rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+}
+
+.detail-row .label {
+  font-weight: 600;
+  color: #00ffe0;
+  min-width: 140px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.detail-row .value {
+  color: #ffffff;
+  text-align: right;
+  flex: 1;
+  font-family: 'Poppins', sans-serif;
+}
+
+.pending-message {
+  background: rgba(255, 193, 7, 0.15);
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  border-radius: 8px;
+  padding: 1rem;
+  color: #ffc107;
+  font-size: 0.95rem;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.approved-message {
+  background: rgba(40, 167, 69, 0.15);
+  border: 1px solid rgba(40, 167, 69, 0.4);
+  border-radius: 8px;
+  padding: 1rem;
+  color: #28a745;
+  font-size: 0.95rem;
+  text-align: center;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+}
+
+.denied-message {
+  background: rgba(220, 53, 69, 0.15);
+  border: 1px solid rgba(220, 53, 69, 0.4);
+  border-radius: 8px;
+  padding: 1rem;
+  color: #dc3545;
+  font-size: 0.95rem;
+  text-align: center;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .my-requests {
+    padding: 1rem;
+  }
+  
+  .request-card {
+    padding: 1.5rem;
+  }
+  
+  .request-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+  
+  .detail-row {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .detail-row .value {
+    text-align: left;
+  }
+}

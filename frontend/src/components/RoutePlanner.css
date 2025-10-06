@@ -1,0 +1,92 @@
+.route-planner-root {
+  min-height: 100vh;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.route-planner-panel-glass {
+  background: rgba(20, 30, 40, 0.85);
+  border-radius: 24px;
+  box-shadow: 0 0 32px #00ffe055;
+  padding: 2.5rem 3rem;
+  min-width: 420px;
+  max-width: 700px;
+  width: 100%;
+}
+.route-planner-title {
+  color: #00ffe0;
+  font-family: 'Orbitron', 'Poppins', sans-serif;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 12px #00ffe0cc;
+  letter-spacing: 2px;
+  text-align: center;
+}
+.route-planner-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+.route-planner-label {
+  color: #00ffe0;
+  font-size: 1.1rem;
+  font-family: 'Poppins', sans-serif;
+}
+.route-planner-dropdown {
+  background: #101820;
+  color: #00ffe0;
+  border: 1.5px solid #00ffe0;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  outline: none;
+  box-shadow: 0 0 8px #00ffe055;
+}
+.route-planner-cards-row {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+.route-planner-card {
+  background: rgba(10, 20, 30, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 0 16px #00ffe055;
+  padding: 1.2rem 2rem;
+  min-width: 120px;
+  text-align: center;
+}
+.route-planner-card-title {
+  color: #00ffe0;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  font-family: 'Orbitron', 'Poppins', sans-serif;
+}
+.route-planner-card-value {
+  color: #fff;
+  font-size: 1.3rem;
+  font-family: 'Orbitron', 'Poppins', sans-serif;
+  text-shadow: 0 0 8px #00ffe0cc;
+}
+.route-planner-alerts-row {
+  margin-top: 2rem;
+}
+.route-planner-alerts-title {
+  color: #00ffe0;
+  font-size: 1.1rem;
+  margin-bottom: 0.7rem;
+  font-family: 'Orbitron', 'Poppins', sans-serif;
+}
+.route-planner-alert-card {
+  background: rgba(0,255,224,0.07);
+  border-radius: 10px;
+  box-shadow: 0 0 8px #00ffe033;
+  padding: 0.7rem 1.2rem;
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  border: 1.5px solid #00ffe0;
+}

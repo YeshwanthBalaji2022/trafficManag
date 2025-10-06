@@ -1,0 +1,348 @@
+.admin-override-timer {
+  font-size: 1.5rem;
+  color: #00ffe0;
+  font-family: 'Orbitron', 'Poppins', sans-serif;
+  margin-bottom: 0.7rem;
+  text-shadow: 0 0 8px #00ffe0cc;
+  letter-spacing: 1px;
+}
+.admin-top-flex {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+.admin-override-card {
+  min-width: 220px;
+  /* flex: 1 1 220px; */
+  max-width: 600px;
+  width: 100%;
+}
+.admin-stats-flex {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  flex: 2 1 400px;
+  justify-content: flex-end;
+}
+.admin-bottom-flex {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+}
+.admin-sim-card, .admin-video-card {
+  flex: 1 1 320px;
+  max-width: 420px;
+}
+/* Glassy neon admin panel for project theme */
+.admin-root {
+  min-height: 100vh;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+}
+.admin-panel-glass {
+  background: rgba(20, 20, 20, 0.92);
+  border-radius: 22px;
+  box-shadow: 0 0 32px #00ffe055, 0 0 80px #00ffe015;
+  padding: 2.5rem 2.5rem 2rem 2.5rem;
+  min-width: 380px;
+  max-width: 90vwpx;
+  width: 100%;
+  margin: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2.5px solid #00ffe0;
+  backdrop-filter: blur(10px);
+}
+.admin-title {
+  color: #00ffe0;
+  font-family: 'Orbitron', 'Poppins', sans-serif;
+  font-size: 2.1rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 12px #00ffe0cc;
+  letter-spacing: 2px;
+  text-align: center;
+}
+.admin-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+.admin-label {
+  color: #00ffe0;
+  font-weight: 600;
+  margin-right: 1rem;
+  font-size: 1.1rem;
+}
+.admin-dropdown {
+  background: #18181b;
+  color: #00ffe0;
+  border: 1.5px solid #00ffe0;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1.1rem;
+  font-family: 'Poppins', sans-serif;
+  outline: none;
+  box-shadow: 0 0 8px #00ffe033;
+  transition: border 0.2s;
+}
+.admin-dropdown:focus {
+  border: 1.5px solid #0077ff;
+}
+.admin-stats-row {
+  gap: 1.5rem;
+  margin-bottom: 2.2rem;
+}
+.admin-stat-card {
+  background: rgba(0,255,224,0.07);
+  border-radius: 12px;
+  box-shadow: 0 0 12px #00ffe033;
+  padding: 1.1rem 2.2rem;
+  text-align: center;
+  min-width: 110px;
+  border: 1.5px solid #00ffe0;
+}
+.admin-stat-title {
+  font-size: 1.1rem;
+  color: #00ffe0;
+  font-weight: bold;
+}
+.admin-stat-count {
+  display: block;
+  font-size: 2.2rem;
+  color: #00ffe0;
+  margin: 0.5rem 0;
+  text-shadow: 0 0 8px #00ffe0cc;
+}
+.admin-stat-label {
+  font-size: 0.9rem;
+  color: #e0e0e0;
+}
+.admin-video-card {
+  background: rgba(0,255,224,0.07);
+  border-radius: 16px;
+  box-shadow: 0 0 18px #00ffe033;
+  padding: 1.2rem 1.2rem 1.5rem 1.2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1.5px solid #00ffe0;
+}
+.admin-video-label {
+  color: #00ffe0;
+  font-weight: 600;
+  margin-bottom: 0.7rem;
+  font-size: 1.1rem;
+}
+.admin-fisheye-img {
+  width: 100%;
+  max-width: 520px;
+  height: 340px;
+  object-fit: cover;
+  background: #111;
+  border-radius: 10px;
+  border: 2px solid #00ffe0;
+  box-shadow: 0 0 18px #00ffe033;
+}
+.admin-bottom-row {
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+}
+.admin-sim-card, .admin-override-card {
+  background: rgba(0,255,224,0.07);
+  border-radius: 14px;
+  box-shadow: 0 0 12px #00ffe033;
+  padding: 1.2rem 2rem 1.5rem 2rem;
+  border: 1.5px solid #00ffe0;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.admin-sim-graphic {
+  height: 80px;
+  width: 180px;
+  background: rgba(0,255,224,0.08);
+  border-radius: 8px;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00ffe0;
+  border: 1.5px dashed #00ffe0;
+  font-size: 1.1rem;
+}
+.admin-override-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-top: 1rem;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+.admin-override-btn {
+  min-width: 80px;
+  max-width: 100%;
+  word-break: break-word;
+}
+/* Default button style */
+.admin-override-btn {
+  background: linear-gradient(90deg, #00ffe0 0%, #0077ff 100%);
+  color: #0a0a0a;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 0 12px #00ffe055;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  flex-direction: row;
+}
+.admin-override-btn.active {
+  background: linear-gradient(90deg, #00ff88 0%, #00ff44 100%);
+  color: #fff;
+}
+.admin-override-btn.inactive {
+  background: linear-gradient(90deg, #ff2d2d 0%, #b71c1c 100%);
+  color: #fff;
+}
+.admin-override-btn:hover {
+  background: linear-gradient(90deg, #0077ff 0%, #00ffe0 100%);
+  color: #18181b;
+}
+/* AdminPage.css */
+.admin-root {
+  min-height: 100vh;
+  background: #111;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 16px;
+  font-family: inherit;
+}
+.admin-top-controls {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+.admin-dropdown-panel {
+  background: #b71c1c;
+  border-radius: 12px;
+  padding: 16px;
+  width: 24%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.admin-label {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.admin-dropdown {
+  background: #111;
+  color: #fff;
+  border: 1px solid #b71c1c;
+  border-radius: 6px;
+  padding: 6px 12px;
+  width: 100%;
+}
+#junction-select{
+  width: 12vw;
+}
+.admin-info-panel {
+  background: #b71c1c;
+  border-radius: 12px;
+  padding: 16px;
+  width: 48%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.admin-main-content {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+}
+.admin-simulation-panel {
+  background: #b71c1c;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+  height: 400px;
+  text-align: center;
+}
+.admin-manual-panel {
+  background: #b71c1c99;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 25%;
+  height: 400px;
+}
+.admin-manual-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+.admin-manual-btn {
+  background: #b71c1c;
+  border-radius: 8px;
+  width: 80px;
+  height: 80px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.admin-manual-btn:hover {
+  background: #d32f2f;
+}
+.admin-video-feeds {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 20%;
+}
+.admin-video-feed {
+  background: #b71c1c;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  text-align: center;
+}

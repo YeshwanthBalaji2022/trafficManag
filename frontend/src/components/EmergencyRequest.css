@@ -1,0 +1,132 @@
+.emergency-request-root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #0a0a0a;
+  padding-top: 120px; /* Account for fixed navbar */
+}
+
+.emergency-request-panel-glass {
+  background: rgba(20, 30, 40, 0.85);
+  border-radius: 24px;
+  box-shadow: 0 0 32px #00ffe055;
+  padding: 2.5rem 3rem;
+  min-width: 420px;
+  max-width: 500px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.emergency-request-title {
+  color: #00ffe0;
+  font-family: 'Orbitron', 'Poppins', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 12px #00ffe0cc;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+.emergency-request-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.emergency-request-label {
+  color: #00ffe0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 0.5rem;
+}
+
+.emergency-request-dropdown,
+.emergency-request-input {
+  background: #101820;
+  border: 1.5px solid #00ffe0;
+  border-radius: 8px;
+  color: #00ffe0;
+  padding: 0.75rem 1.2rem;
+  font-size: 1rem;
+  outline: none;
+  box-shadow: 0 0 8px #00ffe055;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.emergency-request-dropdown:focus,
+.emergency-request-input:focus {
+  border-color: #00ffe0;
+  box-shadow: 0 0 16px #00ffe0aa;
+  background: rgba(16, 24, 32, 0.8);
+}
+
+.emergency-request-btn {
+  background: linear-gradient(90deg, #00ffe0 0%, #00ff88 100%);
+  color: #0a0a0a;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 0 16px #00ffe055;
+  transition: all 0.3s ease;
+  font-family: 'Orbitron', 'Poppins', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 1rem;
+}
+
+.emergency-request-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px #00ffe0aa;
+}
+
+.emergency-request-btn:disabled {
+  background: #101820;
+  color: #666;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.emergency-request-status {
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  background: rgba(10, 20, 30, 0.8);
+  border: 1px solid rgba(0, 255, 224, 0.3);
+}
+
+.emergency-request-status.pending {
+  color: #00ffe0;
+  text-shadow: 0 0 8px #00ffe0cc;
+}
+
+.emergency-request-status.sent {
+  color: #00ffe0;
+  text-shadow: 0 0 8px #00ffe0cc;
+}
+
+.emergency-request-status.approved {
+  color: #00ff88;
+  text-shadow: 0 0 8px #00ff88cc;
+  border-color: rgba(0, 255, 136, 0.5);
+}
+
+.emergency-request-status.denied {
+  color: #ff4757;
+  text-shadow: 0 0 8px #ff4757cc;
+  border-color: rgba(255, 71, 87, 0.5);
+}

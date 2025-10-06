@@ -1,20 +1,22 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import JunctionSimulation from './JunctionSimulation';
+import { getAllVehicleCountsUrl, getVideoStreamUrl, updateSignalDirection } from '../utils/apiUtils';
+import type { Junction, Direction } from '../utils/apiUtils';
 import './AdminPage.css';
 
 const JUNCTIONS = [
-  { label: 'Junction 01', value: '01_' },
-  { label: 'Junction 02', value: '02_' },
-  { label: 'Junction 05', value: '05_' },
-  { label: 'Rifatslu', value: 'rifatuslu_' },
+  { label: 'Junction 01 (Normal)', value: 'normal_01' as Junction },
+  { label: 'Junction 02 (Normal)', value: 'normal_02' as Junction },
+  { label: 'Junction 03 (Flipped)', value: 'flipped_03' as Junction },
+  { label: 'Junction 04 (Flipped)', value: 'flipped_04' as Junction },
 ];
-const DIRECTIONS = ['north', 'east', 'south', 'west'];
+const DIRECTIONS: Direction[] = ['north', 'east', 'south', 'west'];
 
 const AdminPage: React.FC = () => {
-  const [selectedJunction, setSelectedJunction] = useState(JUNCTIONS[0].value);
+  const [selectedJunction, setSelectedJunction] = useState<Junction>(JUNCTIONS[0].value);
   const [vehicleCounts, setVehicleCounts] = useState<{ [key: string]: number }>({});
-  const [activeOverride, setActiveOverride] = useState<string>(DIRECTIONS[0]);
+  const [activeOverride, setActiveOverride] = useState<Direction>(DIRECTIONS[0]);
   const [timer, setTimer] = useState<number>(60);
   const [greenTimes, setGreenTimes] = useState<{ [key: string]: number }>({ north: 30, east: 30, south: 30, west: 30 });
 
@@ -58,7 +60,7 @@ const AdminPage: React.FC = () => {
       setActiveOverride(prevDir => {
         const idx = DIRECTIONS.indexOf(prevDir);
         const nextDir = DIRECTIONS[(idx + 1) % DIRECTIONS.length];
-        updateSignalStatus(nextDir); // Send automatic change to backend
+        handleUpdateSignalStatus(nextDir); // Send automatic change to backend
         return nextDir;
       });
       return;
@@ -68,51 +70,71 @@ const AdminPage: React.FC = () => {
     }, 1000);
     return () => clearInterval(interval);
   }, [timer, greenTimes, activeOverride]);
-  const eventSourcesRef = useRef<{ [key: string]: EventSource | null }>({});
-
-  // Helper to get vehicle count SSE URL for a direction
-  const getVehicleCountUrl = (direction: string) => {
-    return `http://localhost:8001/junction_vehicle_count/${direction}?junction=${selectedJunction}`;
-  };
+  
+  const eventSourceRef = useRef<EventSource | null>(null);
 
   // Function to update signal status on backend
-  const updateSignalStatus = async (direction: string) => {
+  const handleUpdateSignalStatus = async (direction: Direction) => {
     try {
-      await fetch(`http://localhost:8000/junction_signal_status?junction=${selectedJunction}&direction=${direction}`, {
-        method: 'POST',
-      });
+      await updateSignalDirection(selectedJunction, direction);
     } catch (error) {
       console.error('Failed to update signal status:', error);
     }
   };
 
   // Enhanced signal override handler
-  const handleSignalOverride = (dir: string) => {
+  const handleSignalOverride = (dir: Direction) => {
     setActiveOverride(dir);
     setTimer(greenTimes[dir] || 30);
-    updateSignalStatus(dir); // Send to backend
+    handleUpdateSignalStatus(dir); // Send to backend
   };
-  // Setup SSE for each direction 
+  // Setup single SSE for all directions (more efficient)
   useEffect(() => {
-    Object.values(eventSourcesRef.current).forEach(es => es && es.close());
-    eventSourcesRef.current = {};
-    DIRECTIONS.forEach(dir => {
-      const url = getVehicleCountUrl(dir);
-      const es = new window.EventSource(url);
-      eventSourcesRef.current[dir] = es;
-      es.onmessage = (event: MessageEvent) => {
-        try {
-          const data = JSON.parse(event.data);
-          setVehicleCounts(prev => ({ ...prev, [dir]: data.vehicles }));
-        } catch (e) {}
-      };
-      es.onerror = () => {
-        es.close();
-      };
-    });
+    // Close existing connection
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+    }
+    
+    const url = getAllVehicleCountsUrl(selectedJunction);
+    console.log(`[AdminPage] Setting up single SSE connection with URL: ${url}`);
+    const es = new window.EventSource(url);
+    eventSourceRef.current = es;
+    
+    es.onopen = () => {
+      console.log(`[AdminPage] SSE connection opened for all directions`);
+    };
+    
+    es.onmessage = (event: MessageEvent) => {
+      console.log(`[AdminPage] Received SSE message:`, event.data);
+      try {
+        const data = JSON.parse(event.data);
+        console.log(`[AdminPage] Parsed data:`, data);
+        
+        // Use all_directions data if available (more efficient)
+        if (data.all_directions) {
+          setVehicleCounts(data.all_directions);
+          console.log(`[AdminPage] Updated all vehicle counts:`, data.all_directions);
+        } else {
+          // Fallback to individual direction data
+          setVehicleCounts(prev => ({
+            ...prev,
+            [data.direction]: data.vehicles
+          }));
+        }
+      } catch (e) {
+        console.error(`[AdminPage] Error parsing vehicle count data:`, e, 'Raw data:', event.data);
+      }
+    };
+    
+    es.onerror = (error) => {
+      console.error(`[AdminPage] SSE connection error:`, error);
+      es.close();
+    };
+    
     return () => {
-      Object.values(eventSourcesRef.current).forEach(es => es && es.close());
-      eventSourcesRef.current = {};
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+      }
     };
   }, [selectedJunction]);
 
@@ -120,19 +142,21 @@ const AdminPage: React.FC = () => {
     <div className="admin-root">
       <div className="admin-panel-glass">
         <h2 className="admin-title">Admin Dashboard</h2>
+        
         <div className="admin-row" style={{ marginBottom: 32 }}>
           <label className="admin-label" htmlFor="junction-select">Junction:</label>
           <select
             id="junction-select"
             className="admin-dropdown"
             value={selectedJunction}
-            onChange={e => setSelectedJunction(e.target.value)}
+            onChange={e => setSelectedJunction(e.target.value as Junction)}
           >
             {JUNCTIONS.map(j => (
               <option key={j.value} value={j.value}>{j.label}</option>
             ))}
           </select>
         </div>
+        
         <div className="admin-row admin-top-flex">
           <div className="admin-override-card">
             <h3>Manual Override</h3>
@@ -164,16 +188,19 @@ const AdminPage: React.FC = () => {
             ))}
           </div>
         </div>
+        
         <div className="admin-row admin-bottom-flex">
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 320 }}>
             <JunctionSimulation vehicleCounts={vehicleCounts} activeSignal={activeOverride} />
           </div>
           <div className="admin-video-card">
-            <div className="admin-video-label">Fisheye Camera Feed</div>
+            <div className="admin-video-label">
+              Drone Camera Feed
+            </div>
             <img
-              src={`http://localhost:8001/stitched_video_feed/${selectedJunction}`}
-              alt="Fisheye video feed"
-              className="admin-fisheye-img"
+              src={getVideoStreamUrl(selectedJunction)}
+              alt="Drone video feed"
+              className="admin-video-img"
             />
           </div>
         </div>

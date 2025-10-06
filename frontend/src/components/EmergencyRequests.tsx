@@ -12,10 +12,10 @@ interface EmergencyRequest {
 }
 
 const JUNCTIONS = [
-  { label: 'Junction 01', value: '01_' },
-  { label: 'Junction 02', value: '02_' },
-  { label: 'Junction 05', value: '05_' },
-  { label: 'Rifatslu', value: 'rifatuslu_' },
+  { label: 'Junction 01 (Normal)', value: 'normal_01' },
+  { label: 'Junction 02 (Normal)', value: 'normal_02' },
+  { label: 'Junction 03 (Flipped)', value: 'flipped_03' },
+  { label: 'Junction 04 (Flipped)', value: 'flipped_04' },
 ];
 
 const EmergencyRequests: React.FC = () => {

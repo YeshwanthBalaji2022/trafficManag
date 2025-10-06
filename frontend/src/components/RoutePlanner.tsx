@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './RoutePlanner.css';
 
 const JUNCTIONS = [
-  { label: 'Junction 01', value: '01_' },
-  { label: 'Junction 02', value: '02_' },
-  { label: 'Junction 05', value: '05_' },
-  { label: 'Rifatslu', value: 'rifatuslu_' },
+  { label: 'Junction 01', value: 'normal_01' },
+  { label: 'Junction 02', value: 'normal_02' },
+  { label: 'Junction 03', value: 'flipped_03' },
+  { label: 'Junction 04', value: 'flipped_04' },
 ];
 
 const RoutePlanner: React.FC = () => {

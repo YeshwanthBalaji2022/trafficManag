@@ -1,56 +1,85 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './Analytics.css';
+import { getAllVehicleCountsUrl } from '../utils/apiUtils';
+import type { Junction, Direction } from '../utils/apiUtils';
 
 const JUNCTIONS = [
-  { label: 'Junction 01', value: '01_' },
-  { label: 'Junction 02', value: '02_' },
-  { label: 'Junction 05', value: '05_' },
-  { label: 'Rifatslu', value: 'rifatuslu_' },
+  { label: 'Junction 01', value: 'normal_01' as Junction },
+  { label: 'Junction 02', value: 'normal_02' as Junction },
+  { label: 'Junction 03', value: 'flipped_03' as Junction },
+  { label: 'Junction 04', value: 'flipped_04' as Junction },
 ];
-const DIRECTIONS = ['north', 'east', 'south', 'west'];
-
-const getVehicleCountUrl = (junction: string, direction: string) =>
-  `http://localhost:8001/junction_vehicle_count/${direction}?junction=${junction}`;
+const DIRECTIONS: Direction[] = ['north', 'east', 'south', 'west'];
 
 const Analytics: React.FC = () => {
-  const [selectedJunction, setSelectedJunction] = useState(JUNCTIONS[0].value);
+  const [selectedJunction, setSelectedJunction] = useState<Junction>(JUNCTIONS[0].value);
   const [vehicleCounts, setVehicleCounts] = useState<{ [key: string]: number }>({});
   const [history, setHistory] = useState<{ [key: string]: number[] }>({});
 
-  const eventSourcesRef = useRef<{ [key: string]: EventSource | null }>({});
+  const eventSourceRef = useRef<EventSource | null>(null);
 
-  // Setup SSE for each direction
+  // Setup single SSE for all directions (more efficient)
   useEffect(() => {
-    Object.values(eventSourcesRef.current).forEach(es => es && es.close());
-    eventSourcesRef.current = {};
-    DIRECTIONS.forEach(dir => {
-      const url = getVehicleCountUrl(selectedJunction, dir);
-      const es = new window.EventSource(url);
-      eventSourcesRef.current[dir] = es;
-      es.onmessage = (event: MessageEvent) => {
-        try {
-          const data = JSON.parse(event.data);
-          setVehicleCounts(prev => ({ ...prev, [dir]: data.vehicles }));
+    // Close existing connection
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+    }
+    
+    const url = getAllVehicleCountsUrl(selectedJunction);
+    const es = new window.EventSource(url);
+    eventSourceRef.current = es;
+    
+    es.onmessage = (event: MessageEvent) => {
+      try {
+        const data = JSON.parse(event.data);
+        
+        // Use all_directions data if available (more efficient)
+        if (data.all_directions) {
+          setVehicleCounts(data.all_directions);
+          
+          // Update history for all directions at once
+          setHistory(prev => {
+            const newHistory = { ...prev };
+            DIRECTIONS.forEach(dir => {
+              const count = data.all_directions[dir] || 0;
+              newHistory[dir] = [...(prev[dir] || []), count].slice(-60); // last 60 samples
+            });
+            return newHistory;
+          });
+        } else {
+          // Fallback to individual direction data
+          const direction = data.direction;
+          const count = data.vehicles || 0;
+          
+          setVehicleCounts(prev => ({ ...prev, [direction]: count }));
           setHistory(prev => ({
             ...prev,
-            [dir]: [...(prev[dir] || []), data.vehicles].slice(-60), // last 60 samples
+            [direction]: [...(prev[direction] || []), count].slice(-60),
           }));
-        } catch (e) {}
-      };
-      es.onerror = () => es.close();
-    });
+        }
+      } catch (e) {
+        console.error('Analytics SSE parse error:', e);
+      }
+    };
+    
+    es.onerror = () => {
+      console.warn('Analytics SSE connection error');
+      es.close();
+    };
+    
     return () => {
-      Object.values(eventSourcesRef.current).forEach(es => es && es.close());
-      eventSourcesRef.current = {};
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+      }
     };
   }, [selectedJunction]);
 
   // Analytics calculations
   const totalVehicles = DIRECTIONS.reduce((sum, dir) => sum + (vehicleCounts[dir] || 0), 0);
-  const avgPerMinute = DIRECTIONS.reduce((sum, dir) => {
+  const avgPerMinute = Math.max(0, DIRECTIONS.reduce((sum, dir) => {
     const arr = history[dir] || [];
-    return sum + (arr.length > 0 ? (arr[arr.length - 1] - arr[0]) : 0);
-  }, 0);
+    return sum + (arr.length > 0 ? Math.max(0, arr[arr.length - 1] - arr[0]) : 0);
+  }, 0));
   const peakDirection = DIRECTIONS.reduce((peak, dir) =>
     (vehicleCounts[dir] || 0) > (vehicleCounts[peak] || 0) ? dir : peak, DIRECTIONS[0]
   );
@@ -59,13 +88,14 @@ const Analytics: React.FC = () => {
     <div className="analytics-root">
       <div className="analytics-panel-glass">
         <h2 className="analytics-title">Junction Analytics</h2>
+        
         <div className="analytics-row" style={{ marginBottom: 32 }}>
           <label className="analytics-label" htmlFor="junction-select">Junction:</label>
           <select
             id="junction-select"
             className="analytics-dropdown"
             value={selectedJunction}
-            onChange={e => setSelectedJunction(e.target.value)}
+            onChange={e => setSelectedJunction(e.target.value as Junction)}
           >
             {JUNCTIONS.map(j => (
               <option key={j.value} value={j.value}>{j.label}</option>
@@ -85,6 +115,10 @@ const Analytics: React.FC = () => {
             <div className="analytics-card-title">Peak Direction</div>
             <div className="analytics-card-value">{peakDirection.toUpperCase()}</div>
           </div>
+          {/* <div className="analytics-card">
+            <div className="analytics-card-title">Camera System</div>
+            <div className="analytics-card-value">🚁 DRONE</div>
+          </div> */}
         </div>
         <div className="analytics-directions-row">
           {DIRECTIONS.map(dir => (

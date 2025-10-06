@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SSE Debug</title>
+</head>
+<body>
+    <h1>SSE Vehicle Count Debug</h1>
+    <div id="output"></div>
+    
+    <script>
+        const output = document.getElementById('output');
+        const url = 'http://localhost:8002/drone/junction_vehicle_count/north?junction=normal_01';
+        
+        output.innerHTML += `<p>Connecting to: ${url}</p>`;
+        
+        const es = new EventSource(url);
+        
+        es.onopen = function() {
+            output.innerHTML += `<p style="color: green;">Connected!</p>`;
+        };
+        
+        es.onmessage = function(event) {
+            output.innerHTML += `<p><strong>Raw event.data:</strong> ${event.data}</p>`;
+            try {
+                const data = JSON.parse(event.data);
+                output.innerHTML += `<p><strong>Parsed vehicles:</strong> ${data.vehicles}</p>`;
+                output.innerHTML += `<p><strong>All directions:</strong> ${JSON.stringify(data.all_directions)}</p>`;
+            } catch (e) {
+                output.innerHTML += `<p style="color: red;"><strong>Parse error:</strong> ${e.message}</p>`;
+            }
+        };
+        
+        es.onerror = function(event) {
+            output.innerHTML += `<p style="color: red;">Error occurred: ${event}</p>`;
+        };
+    </script>
+</body>
+</html>

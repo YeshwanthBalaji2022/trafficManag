@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Count SSE Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .direction { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+        .count { font-weight: bold; font-size: 24px; color: #333; }
+        .status { color: #666; font-size: 12px; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Real-time Vehicle Count Test</h1>
+    <div id="junction-select">
+        <label>Junction: </label>
+        <select id="junction" onchange="changeJunction()">
+            <option value="junction1">Junction 1 (normal_01)</option>
+            <option value="junction2">Junction 2 (normal_02)</option>
+            <option value="junction3">Junction 3 (flipped_03)</option>
+            <option value="junction4">Junction 4 (flipped_04)</option>
+        </select>
+    </div>
+    
+    <div id="directions">
+        <div class="direction" id="north">
+            <h3>North</h3>
+            <div class="count" id="north-count">-</div>
+            <div class="status" id="north-status">Connecting...</div>
+        </div>
+        <div class="direction" id="east">
+            <h3>East</h3>
+            <div class="count" id="east-count">-</div>
+            <div class="status" id="east-status">Connecting...</div>
+        </div>
+        <div class="direction" id="south">
+            <h3>South</h3>
+            <div class="count" id="south-count">-</div>
+            <div class="status" id="south-status">Connecting...</div>
+        </div>
+        <div class="direction" id="west">
+            <h3>West</h3>
+            <div class="count" id="west-count">-</div>
+            <div class="status" id="west-status">Connecting...</div>
+        </div>
+    </div>
+
+    <div id="total">
+        <h3>Total Vehicles: <span id="total-count">0</span></h3>
+    </div>
+
+    <script>
+        const DRONE_BASE = 'http://localhost:8002';
+        const DRONE_JUNCTION_MAP = {
+            'junction1': 'normal_01',
+            'junction2': 'normal_02', 
+            'junction3': 'flipped_03',
+            'junction4': 'flipped_04'
+        };
+        const DIRECTIONS = ['north', 'east', 'south', 'west'];
+        
+        let eventSources = {};
+        let vehicleCounts = {};
+        let currentJunction = 'junction1';
+
+        function getVehicleCountUrl(direction, junction) {
+            const droneJunction = DRONE_JUNCTION_MAP[junction];
+            return `${DRONE_BASE}/drone/junction_vehicle_count/${direction}?junction=${droneJunction}`;
+        }
+
+        function updateTotalCount() {
+            const total = DIRECTIONS.reduce((sum, dir) => sum + (vehicleCounts[dir] || 0), 0);
+            document.getElementById('total-count').textContent = total;
+        }
+
+        function setupSSEConnections() {
+            // Close existing connections
+            Object.values(eventSources).forEach(es => es && es.close());
+            eventSources = {};
+            vehicleCounts = {};
+
+            DIRECTIONS.forEach(dir => {
+                const url = getVehicleCountUrl(dir, currentJunction);
+                console.log(`Setting up SSE for ${dir} with URL: ${url}`);
+                
+                const statusEl = document.getElementById(`${dir}-status`);
+                const countEl = document.getElementById(`${dir}-count`);
+                
+                statusEl.textContent = 'Connecting...';
+                statusEl.className = 'status';
+                countEl.textContent = '-';
+
+                const es = new EventSource(url);
+                eventSources[dir] = es;
+
+                es.onopen = () => {
+                    console.log(`SSE connection opened for ${dir}`);
+                    statusEl.textContent = 'Connected';
+                    statusEl.className = 'status success';
+                };
+
+                es.onmessage = (event) => {
+                    console.log(`Received SSE message for ${dir}:`, event.data);
+                    try {
+                        const data = JSON.parse(event.data);
+                        console.log(`Parsed data for ${dir}:`, data);
+                        
+                        vehicleCounts[dir] = data.vehicles;
+                        countEl.textContent = data.vehicles;
+                        statusEl.textContent = `Last update: ${new Date().toLocaleTimeString()}`;
+                        
+                        updateTotalCount();
+                    } catch (e) {
+                        console.error(`Error parsing data for ${dir}:`, e, 'Raw data:', event.data);
+                        statusEl.textContent = `Parse error: ${e.message}`;
+                        statusEl.className = 'status error';
+                    }
+                };
+
+                es.onerror = (error) => {
+                    console.error(`SSE connection error for ${dir}:`, error);
+                    statusEl.textContent = 'Connection error';
+                    statusEl.className = 'status error';
+                    es.close();
+                };
+            });
+        }
+
+        function changeJunction() {
+            currentJunction = document.getElementById('junction').value;
+            console.log('Changing to junction:', currentJunction);
+            setupSSEConnections();
+        }
+
+        // Initialize on page load
+        window.onload = () => {
+            setupSSEConnections();
+        };
+
+        // Cleanup on page unload
+        window.onbeforeunload = () => {
+            Object.values(eventSources).forEach(es => es && es.close());
+        };
+    </script>
+</body>
+</html>

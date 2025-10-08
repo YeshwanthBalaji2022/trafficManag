@@ -1,0 +1,182 @@
+.emergency-requests-root {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  background: #0a0a0a;
+  padding: 2rem 1rem;
+  padding-top: 140px; /* Account for fixed navbar */
+}
+
+.emergency-requests-panel-glass {
+  background: rgba(20, 30, 40, 0.85);
+  border-radius: 24px;
+  box-shadow: 0 0 32px #00ffe055;
+  padding: 2.5rem 3rem;
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.emergency-requests-title {
+  color: #00ffe0;
+  font-family: 'Orbitron', 'Poppins', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  text-shadow: 0 0 12px #00ffe0cc;
+  letter-spacing: 2px;
+}
+
+.emergency-requests-empty {
+  color: #00ffe0;
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 3rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.emergency-requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.emergency-request-card {
+  background: rgba(10, 20, 30, 0.95);
+  border: 1px solid rgba(0, 255, 224, 0.3);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.emergency-request-card:hover {
+  background: rgba(20, 30, 40, 0.95);
+  box-shadow: 0 0 24px #00ffe0aa;
+  border-color: rgba(0, 255, 224, 0.6);
+}
+
+.emergency-request-card.pending {
+  border-color: #ffc107;
+}
+
+.emergency-request-card.approved {
+  border-color: #28a745;
+}
+
+.emergency-request-card.denied {
+  border-color: #dc3545;
+}
+
+.emergency-request-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.emergency-request-junction {
+  color: #00ffe0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  font-family: 'Orbitron', 'Poppins', sans-serif;
+}
+
+.emergency-request-status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.emergency-request-status-badge.pending {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.4);
+}
+
+.emergency-request-status-badge.approved {
+  background: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+  border: 1px solid rgba(40, 167, 69, 0.4);
+}
+
+.emergency-request-status-badge.denied {
+  background: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+  border: 1px solid rgba(220, 53, 69, 0.4);
+}
+
+.emergency-request-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.emergency-request-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.emergency-request-label {
+  color: #00ffe0;
+  font-weight: 500;
+  min-width: 100px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.emergency-request-value {
+  color: #ffffff;
+  flex: 1;
+  font-family: 'Poppins', sans-serif;
+}
+
+.emergency-request-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.emergency-request-approve-btn,
+.emergency-request-deny-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.emergency-request-approve-btn {
+  background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(40, 167, 69, 0.4);
+}
+
+.emergency-request-approve-btn:hover {
+  background: linear-gradient(90deg, #20c997 0%, #17a2b8 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(40, 167, 69, 0.6);
+}
+
+.emergency-request-deny-btn {
+  background: linear-gradient(90deg, #dc3545 0%, #c82333 100%);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(220, 53, 69, 0.4);
+}
+
+.emergency-request-deny-btn:hover {
+  background: linear-gradient(90deg, #c82333 0%, #bd2130 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(220, 53, 69, 0.6);
+}

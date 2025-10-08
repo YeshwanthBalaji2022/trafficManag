@@ -17,6 +17,8 @@ from ultralytics import YOLO
 import asyncio
 from typing import Dict, List, Any, Optional
 import logging
+import requests
+import time
 
 # Import our hexagonal clustering (will handle missing shapely gracefully)
 try:
@@ -239,14 +241,47 @@ async def get_drone_vehicle_count(direction: str, junction: str = "normal_01"):
 
 @app.get("/drone/junction_signal_status")
 async def get_drone_signal_status(junction: str = "normal_01"):
-    """Get signal status for drone junction (simulated for now)"""
+    """Get signal status for drone junction from API server"""
     
-    # For now, return a simulated cycling signal
-    # This can be enhanced to integrate with actual traffic signal data
+    try:
+        # Map junction names to API server format
+        junction_map = {
+            'junction_01_normal': '01_',
+            'junction_02_normal': '02_',
+            'junction_03_flipped': '05_',
+            'junction_04_flipped': 'rifatuslu_',
+            'normal_01': '01_',
+            'normal_02': '02_',
+            'flipped_03': '05_',
+            'flipped_04': 'rifatuslu_'
+        }
+        
+        api_junction = junction_map.get(junction, junction)
+        
+        # Make SSE request to api_server to get current signal status
+        import requests
+        response = requests.get(f"http://localhost:8000/junction_signal_status?junction={api_junction}", 
+                              timeout=2, stream=True)
+        
+        if response.status_code == 200:
+            # Parse the first SSE message to get current status
+            for line in response.iter_lines(decode_unicode=True):
+                if line.startswith('data: '):
+                    data = json.loads(line[6:])  # Remove 'data: ' prefix
+                    return {
+                        "junction": junction,
+                        "active_direction": data.get('active_signal', 'north'),
+                        "timestamp": int(time.time())
+                    }
+                    break
+    except Exception as e:
+        logger.warning(f"Failed to get signal status from API server: {e}")
+    
+    # Fallback to simulated cycling if API server is unavailable
     directions = ['north', 'east', 'south', 'west']
     import time
     current_time = int(time.time())
-    active_direction = directions[current_time % len(directions)]
+    active_direction = directions[(current_time // 30) % len(directions)]
     
     return {
         "junction": junction,

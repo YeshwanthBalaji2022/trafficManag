@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import './EmergencyRequest.css';
 
 const JUNCTIONS = [
-  { label: 'Junction 01 (Normal)', value: 'normal_01' },
-  { label: 'Junction 02 (Normal)', value: 'normal_02' },
-  { label: 'Junction 03 (Flipped)', value: 'flipped_03' },
-  { label: 'Junction 04 (Flipped)', value: 'flipped_04' },
+  { label: 'Junction 01', value: 'normal_01' },
+  { label: 'Junction 02', value: 'normal_02' },
+  { label: 'Junction 03', value: 'flipped_03' },
+  { label: 'Junction 04', value: 'flipped_04' },
 ];
 
 const EmergencyRequest: React.FC = () => {

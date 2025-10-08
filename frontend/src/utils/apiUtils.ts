@@ -36,11 +36,19 @@ export const getAllVehicleCountsUrl = (junction: Junction): string => {
 };
 
 /**
- * Get signal status endpoint URL for drone detection
+ * Get signal status endpoint URL for API server
  */
 export const getSignalStatusUrl = (junction: Junction): string => {
-  const droneJunction = DRONE_JUNCTION_MAP[junction];
-  return `${DRONE_BASE}/drone/junction_signal_status?junction=${droneJunction}`;
+  // Map junction names to API server format
+  const junctionMap: Record<Junction, string> = {
+    'normal_01': '01_',
+    'normal_02': '02_',
+    'flipped_03': '05_',
+    'flipped_04': 'rifatuslu_'
+  };
+  
+  const apiJunction = junctionMap[junction] || junction;
+  return `${API_BASE}/junction_signal_status?junction=${apiJunction}`;
 };
 
 /**
@@ -52,17 +60,40 @@ export const getVideoStreamUrl = (junction: Junction): string => {
 };
 
 /**
- * Update signal direction (currently simulated for drone system)
+ * Update signal direction via API server
  */
 export const updateSignalDirection = async (
   junction: Junction,
   direction: Direction
 ): Promise<void> => {
-  // For drone system, signal control is currently simulated
-  // Parameters are kept for API compatibility but not used
-  console.warn('Signal control is simulated for drone system');
-  console.log(`Simulated signal update: ${junction} -> ${direction}`);
-  return Promise.resolve();
+  try {
+    // Map junction names to API server format
+    const junctionMap: Record<Junction, string> = {
+      'normal_01': '01_',
+      'normal_02': '02_',
+      'flipped_03': '05_',
+      'flipped_04': 'rifatuslu_'
+    };
+    
+    const apiJunction = junctionMap[junction] || junction;
+    
+    const response = await fetch(`${API_BASE}/junction_signal_status?junction=${apiJunction}&direction=${direction}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to update signal: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    console.log(`Signal updated successfully: ${junction} -> ${direction}`, result);
+  } catch (error) {
+    console.error('Failed to update signal direction:', error);
+    throw error;
+  }
 };
 
 /**

@@ -4,10 +4,10 @@ import { getAllVehicleCountsUrl, getSignalStatusUrl } from '../utils/apiUtils';
 import type { Junction, Direction } from '../utils/apiUtils';
 
 const JUNCTIONS = [
-  { label: 'Junction 01 (Normal)', value: 'normal_01' as Junction },
-  { label: 'Junction 02 (Normal)', value: 'normal_02' as Junction },
-  { label: 'Junction 03 (Flipped)', value: 'flipped_03' as Junction },
-  { label: 'Junction 04 (Flipped)', value: 'flipped_04' as Junction },
+  { label: 'Junction 01', value: 'normal_01' as Junction },
+  { label: 'Junction 02', value: 'normal_02' as Junction },
+  { label: 'Junction 03', value: 'flipped_03' as Junction },
+  { label: 'Junction 04', value: 'flipped_04' as Junction },
 ];
 const DIRECTIONS: Direction[] = ['north', 'east', 'south', 'west'];
 

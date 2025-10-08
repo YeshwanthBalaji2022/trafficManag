@@ -6,10 +6,10 @@ import type { Junction, Direction } from '../utils/apiUtils';
 import './AdminPage.css';
 
 const JUNCTIONS = [
-  { label: 'Junction 01 (Normal)', value: 'normal_01' as Junction },
-  { label: 'Junction 02 (Normal)', value: 'normal_02' as Junction },
-  { label: 'Junction 03 (Flipped)', value: 'flipped_03' as Junction },
-  { label: 'Junction 04 (Flipped)', value: 'flipped_04' as Junction },
+  { label: 'Junction 01', value: 'normal_01' as Junction },
+  { label: 'Junction 02', value: 'normal_02' as Junction },
+  { label: 'Junction 03', value: 'flipped_03' as Junction },
+  { label: 'Junction 04', value: 'flipped_04' as Junction },
 ];
 const DIRECTIONS: Direction[] = ['north', 'east', 'south', 'west'];
 
@@ -195,11 +195,11 @@ const AdminPage: React.FC = () => {
           </div>
           <div className="admin-video-card">
             <div className="admin-video-label">
-              Drone Camera Feed
+              Surveillance Camera Feed
             </div>
             <img
               src={getVideoStreamUrl(selectedJunction)}
-              alt="Drone video feed"
+              alt="video feed"
               className="admin-video-img"
             />
           </div>
